@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nuxt-community/nuxt-generate-cluster.git"
+    "url": "git+https://github.com/ldo-deputy/nuxt-generate-cluster.git"
   },
   "files": [
     "bin",
