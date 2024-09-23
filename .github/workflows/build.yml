@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+    - run: npm run build --if-present
+
+    # 👇 Store the dist folder
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-build
+        path: dist
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: [build]
+    steps:
+      # 👇 Get the dist folder
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build
+      - run: ls dist
